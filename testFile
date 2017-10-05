@@ -1,0 +1,139 @@
+TESTIK
+
+
+
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SortingAlgorithms
+{
+    public enum Direction
+    {
+        Desc,
+        Asc
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // 1 8 3 4 9 2 5
+            uint[] input = new uint[7] { 1, 8, 3, 4, 9, 2, 5 };
+            PrintIntArray(input);
+            Console.WriteLine("How to sort?\n0: Descending\n1: Ascending");
+            //Direction direction = Console.ReadLine();
+            uint[] sortedBySelectionSort = SelectionSort(input, Direction.Desc);
+            PrintIntArray(sortedBySelectionSort);
+            bool isSorted = IsSorted(sortedBySelectionSort, Direction.Desc);
+
+            uint[] bigData = GenerateData(50000);
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+            uint[] sortedBigDataSelectionSort = SelectionSort(bigData, Direction.Asc);
+            watch.Stop();
+            bool bigDataSorted = IsSorted(sortedBigDataSelectionSort, Direction.Asc);
+            Console.WriteLine("Sorting time for selection sort: {0} sec", watch.Elapsed.Seconds);
+
+        }
+
+        private static uint[] SelectionSort(uint[] input, Direction dir)
+        {
+            uint[] sortedArray = (uint[])input.Clone();
+
+            for (uint lineIndex = 0; lineIndex < sortedArray.Length; lineIndex++)
+            {
+                uint maxItemIndex = lineIndex;
+                for (uint numberIndex = lineIndex + 1; numberIndex < sortedArray.Length; numberIndex++)
+                {
+                    if ((dir == Direction.Desc && sortedArray[numberIndex] > sortedArray[maxItemIndex])  || (dir == Direction.Asc && sortedArray[numberIndex] < sortedArray[maxItemIndex]))
+                    {                        
+                            maxItemIndex = numberIndex;                        
+                    }
+                   
+                    
+                }
+                if (maxItemIndex != lineIndex)
+                {
+                    Swap(sortedArray, maxItemIndex, lineIndex);                    
+                }
+
+            }
+            return sortedArray;
+        }
+
+        private static void Swap(uint[] array, uint indexFirst, uint indexSecond)
+        {
+            uint temp = array[indexFirst];
+            array[indexFirst] = array[indexSecond];
+            array[indexSecond] = temp;
+        }
+        private static void Swap(uint first, uint second)
+        {
+            uint temp = first;
+            first = second;
+            second = temp;
+
+        }
+
+        private static uint[] QuickSort(uint[] input)
+        {
+            throw new NotImplementedException();
+
+
+        }
+
+        private static uint[] MergeSort(uint[] input)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void PrintIntArray(uint[] array)
+        {
+            //prvni zpusob
+            if (array.Length == 0) return;
+            for (int i = 0; i < array.Length - 1; i++)
+            {
+                Console.Write(array[i] + " ");
+            }
+            Console.WriteLine(array[array.Length - 1]);
+
+            ////druhy zpusob
+            //if (array.Length == 0) return;
+            //Console.Write(array[0]);
+            //for (int i = 1; i < array.Length; i++)
+            //{
+            //    Console.Write(" " + array[i]);
+            //}
+        }
+
+        static uint[] GenerateData(uint size)
+        {
+            Random randomGenerator = new Random(DateTime.Now.Millisecond);
+            uint[] generatedData = new uint[size];
+            for (uint i = 0; i < size; i++)
+            {
+                generatedData[i] = (uint)randomGenerator.Next();
+            }
+            return generatedData;
+        }
+
+        static bool IsSorted(uint[] array, Direction dir)
+        {
+            bool result = true;
+            for (uint i = 1; i < array.Length; i++)
+            {
+                if ((dir == Direction.Desc && array[i-1] < array[i]) || (dir == Direction.Asc && array[i - 1] > array[i]))
+                {
+                    result =  false;
+                    break;
+                }
+
+            }
+            return result;
+        }
+
+    }
+}
